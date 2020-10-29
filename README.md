@@ -21,6 +21,6 @@ Az előzőekhez hasonlóan generálódik egy random feladat, melynek helyesség�
 Helyes válaszok esetén, lépésenként felépíthetünk egy hidat.
 Ám vigyázat rossz válasz esetén 2 lépéssel hátrébb kerülhetünk.
 
-Az egyes menükből való kilépés a logóval ellátott gombbal lehetséges, melyre kattintva megjelink egy felugró ablak ami felajánlja a mentés lehetőségét.
+Az egyes menükből való kilépés a logóval ellátott gombbal lehetséges, melyre kattintva megjelenik egy felugró ablak, amely felajánlja a mentés lehetőségét.
 
 
