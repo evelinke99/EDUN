@@ -187,7 +187,8 @@ class Ui_MainWindow2(object):
 
             self.generated=self.basicrand()
             self.textBrowser.setText(str(self.generated[0]))
-            self.solution=sym.simplify(sym.diff(self.generated[0]))
+            self.solution=sym.diff(self.generated[0])
+
         except TypeError:
             pass
 
@@ -246,7 +247,7 @@ class Ui_MainWindow2(object):
             new = cl.Exercises(exercise, solution)
 
             feladat = new.getExercise()
-            realsol = sym.simplify(sym.diff(feladat))
+            realsol = sym.diff(feladat)
 
             if solution=="":
                 raise cl.MissingAnswer
@@ -256,12 +257,10 @@ class Ui_MainWindow2(object):
                     if str(self.generated[1]) not in self.rightSolvedExercises:
                         self.rightSolvedExercises.append(str(self.generated[1]))
                     return True
-                    #self.textEdit.setStyleSheet("background-color:rgba(0,255,0)")
-                    #QtCore.QTimer.singleShot(1000, lambda:self.default())
                 else:
                     self.iconlabel.setPixmap(QtGui.QPixmap(":/images/images/redcross.png"))
                     return False
-                    #self.textEdit.setStyleSheet("background-color:rgba(255,0,0)")
+
         except cl.MissingAnswer:
             pass
 
@@ -269,7 +268,7 @@ class Ui_MainWindow2(object):
     def default(self):
         self.generated=self.basicrand()
         self.textBrowser.setText(str(self.generated[0]))
-        self.solution = sym.simplify(sym.diff(self.generated[0]))
+        self.solution = sym.diff(self.generated[0])
         self.textEdit.clear()
         self.iconlabel.clear()
         self.textEdit.setStyleSheet("")
@@ -334,28 +333,28 @@ class Ui_MainWindow2(object):
 
 
     def getXvalues(self,function):
-        "visszaadja az adott függvény értelmezési tartományát"
+        "visszatér az adott függvény értelmezési tartományával"
         x = sym.symbols('x')
-        k = sym.symbols('k', integer=True)
 
         if function == sym.ln(x) or function==1/x :
             return np.arange(0.1, 20, 0.1)
 
-        elif function == sym.cot(x) or function==sym.simplify(sym.diff(sym.cot(x))):
+        elif function == sym.cot(x) or function==sym.diff(sym.cot(x)):
             return np.arange(0.1,6,0.1)
 
-        elif function == sym.exp(x) or function == k ** x or function == sym.sin(x) or function == sym.cos(x) or function == sym.acot(x):
+        elif function == sym.exp(x)  or function == sym.sin(x) or function == sym.cos(x) or function == sym.acot(x):
             return np.arange(-10, 10, 0.1)
 
-        elif function == sym.asin(x) or function == sym.acos(x) or function==sym.simplify(sym.diff(sym.asin(x))) or function==sym.simplify(sym.diff(sym.acos(x))):
+        elif function == sym.asin(x) or function == sym.acos(x) or function==sym.diff(sym.asin(x)) or function==sym.diff(sym.acos(x)):
             return np.arange(-1, 1, 0.1)
-        elif function == sym.tan(x) or function==sym.simplify(sym.diff(sym.tan(x))):
+        elif function == sym.tan(x) or function==sym.diff(sym.tan(x)):
             return np.arange(-3,3,0.1)
         else:
             return np.arange(-10, 10, 0.1)
 
 
     def drawing(self,exercise,pen,name,xValues):
+        "Függvény x és y tengelyértékeinek tömbbé alakítása és kirajzolása"
         x=Controller.values(exercise,xValues)[0]
         y=Controller.values(exercise,xValues)[1]
 
@@ -496,7 +495,7 @@ class Ui_MainWindow3(object):
 
             self.generated = self.randomComplexFunction()
             self.textBrowser.setText(str(self.generated[0]))
-            self.solution = sym.simplify(sym.diff(self.generated[0]))
+            self.solution = sym.diff(self.generated[0])
 
         except TypeError:
             pass
@@ -560,7 +559,7 @@ class Ui_MainWindow3(object):
             new = cl.Exercises(exercise, solution)
 
             feladat = new.getExercise()
-            realsol = sym.simplify(sym.diff(feladat))
+            realsol = sym.diff(feladat)
 
             if solution=="":
                 raise cl.MissingAnswer
@@ -611,7 +610,7 @@ class Ui_MainWindow3(object):
     def default(self):
         self.generated=self.randomComplexFunction()
         self.textBrowser.setText(str(self.generated[0]))
-        self.solution = sym.simplify(sym.diff(self.generated[0]))
+        self.solution = sym.diff(self.generated[0])
         self.textEdit.clear()
         self.iconlabel.clear()
         self.textEdit.setStyleSheet("")
@@ -623,27 +622,23 @@ class Ui_MainWindow3(object):
     def getXvalues(self,function):
         "visszaadja az adott függvény értelmezési tartományát"
         x = sym.symbols('x')
-        k = sym.symbols('k', integer=True)
 
-        # if (re.search("sin(.*x.*)",str(function)) != None and len(str(function))==len(re.search("sin(.*x.*)",str(function))[0])) or (function==sym.simplify(sym.diff(self.generated[0])) and re.search("sin(.x.*)",str(self.generated[0])) != None ) or re.search("cos(.*x.*)",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search("cos(.x.*)",str(self.generated[0])) != None ):
-        #     return np.arange(-4, 4, 0.1)
-
-        if re.search(".*tan.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search(".*tan.*",str(self.generated[0])) != None ):
+        if re.search(".*tan.*",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search(".*tan.*",str(self.generated[0])) != None ):
             return np.arange(-3, 3, 0.1)
 
-        elif (re.search(".*sin.x.",str(function)) != None and len(str(function))==len(re.search(".*sin.x.",str(function))[0])) or (function==sym.simplify(sym.diff(self.generated[0])) and re.search(".*sin.x.",str(self.generated[0])) != None ):
+        elif (re.search(".*sin.x.",str(function)) != None and len(str(function))==len(re.search(".*sin.x.",str(function))[0])) or (function==sym.diff(self.generated[0]) and re.search(".*sin.x.",str(self.generated[0])) != None ):
             return np.arange(-5,5,0.1)
 
-        elif re.search(".*cos.*log.*x*.",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search(".*cos.*log.*x*.",str(self.generated[0])) != None ):
+        elif re.search(".*cos.*log.*x*.",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search(".*cos.*log.*x*.",str(self.generated[0])) != None ):
             return np.arange(0.1, 10, 0.1)
 
         elif function==sym.simplify(sym.ln(1 * sym.sin(x) - x ** 1)): #ennek felül kell lennie
             return np.arange(-4,-0.1,0.1)
 
-        elif re.search(".*log.*x.*sin.x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search(".*log.*x.*sin.x.*",str(self.generated[0])) != None ):
+        elif re.search(".*log.*x.*sin.x.*",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search(".*log.*x.*sin.x.*",str(self.generated[0])) != None ):
             return np.arange(0.1, 1.4, 0.1)
 
-        elif re.search("exp(.*x.*)",str(self.generated[0])) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search("exp(.*x.*)",str(self.generated[0])) != None ):
+        elif re.search("exp(.*x.*)",str(self.generated[0])) != None or (function==sym.diff(self.generated[0]) and re.search("exp(.*x.*)",str(self.generated[0])) != None ):
             return np.arange(-4, 3, 0.1)
         else:
             return np.arange(-4, 4, 0.1)
@@ -814,7 +809,7 @@ class Ui_MainWindow4(object):
 
             self.generated = self.randomMultiplicationFunction()
             self.textBrowser.setText(str(self.generated[0]))
-            self.solution = sym.simplify(sym.diff(self.generated[0]))
+            self.solution = sym.diff(self.generated[0])
 
         except TypeError:
             pass
@@ -877,16 +872,16 @@ class Ui_MainWindow4(object):
         # if re.search("exp.log.x.*cos.x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search("exp.log.x.*cos.x.*",str(self.generated[0])) != None ):
         #     return np.arange(0.1, 20, 0.1)
 
-        if re.search("exp.tan.x.*cos.*x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search("exp.tan.x.*cos.*x.*",str(self.generated[0])) != None ):
+        if re.search("exp.tan.x.*cos.*x.*",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search("exp.tan.x.*cos.*x.*",str(self.generated[0])) != None ):
             return np.arange(-1, 1.3, 0.1)
 
-        elif re.search(".x.*x.*tan.*x.",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search(".x.*x.*tan.*x.",str(self.generated[0])) != None ):
+        elif re.search(".x.*x.*tan.*x.",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search(".x.*x.*tan.*x.",str(self.generated[0])) != None ):
             return np.arange(-1, 2.5, 0.1)
 
-        elif re.search(".*x.*log.*cos.x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search(".*x.*log.*cos.x.*",str(self.generated[0])) != None ):
+        elif re.search(".*x.*log.*cos.x.*",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search(".*x.*log.*cos.x.*",str(self.generated[0])) != None ):
             return np.arange(5, 7, 0.1)
 
-        elif re.search(".*x.x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search(".*x.x.*",str(self.generated[0])) != None ) or re.search(".*sin.*.*cos.x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search(".*sin.*.*cos.x.*",str(self.generated[0])) != None ):
+        elif re.search(".*x.x.*",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search(".*x.x.*",str(self.generated[0])) != None ) or re.search(".*sin.*.*cos.x.*",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search(".*sin.*.*cos.x.*",str(self.generated[0])) != None ):
             return np.arange(-5, 5, 0.1)
 
         else:
@@ -901,7 +896,7 @@ class Ui_MainWindow4(object):
             new = cl.Exercises(exercise, solution)
 
             feladat = new.getExercise()
-            realsol = sym.simplify(sym.diff(feladat))
+            realsol = sym.diff(feladat)
 
             if solution=="":
                 raise cl.MissingAnswer
@@ -952,7 +947,7 @@ class Ui_MainWindow4(object):
     def default(self):
         self.generated=self.randomMultiplicationFunction()
         self.textBrowser.setText(str(self.generated[0]))
-        self.solution = sym.simplify(sym.diff(self.generated[0]))
+        self.solution = sym.diff(self.generated[0])
         self.textEdit.clear()
         self.iconlabel.clear()
         self.textEdit.setStyleSheet("")
@@ -1127,7 +1122,7 @@ class Ui_MainWindow5(object):
 
             self.generated = self.randomDivisionFunction()
             self.textBrowser.setText(str(self.generated[0]))
-            self.solution = sym.simplify(sym.diff(self.generated[0]))
+            self.solution = sym.diff(self.generated[0])
 
         except TypeError:
             pass
@@ -1187,13 +1182,13 @@ class Ui_MainWindow5(object):
         k = sym.symbols('k', integer=True)
 
 
-        if re.search("acos.*x.*x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search("acos.*x.*x.*",str(self.generated[0])) != None ):
+        if re.search("acos.*x.*x.*",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search("acos.*x.*x.*",str(self.generated[0])) != None ):
             return np.arange(-1, -0.4, 0.01)
 
-        elif re.search("exp.x.*sin.x.*tan.x.*x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search("exp.x.*sin.x.*tan.x.*x.*",str(self.generated[0])) != None ):
+        elif re.search("exp.x.*sin.x.*tan.x.*x.*",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search("exp.x.*sin.x.*tan.x.*x.*",str(self.generated[0])) != None ):
             return np.arange(-2, -0.3, 0.1)
 
-        elif re.search("tan.*sin.*x.*cos.*x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search("tan.*sin.*x.*cos.*x.*",str(self.generated[0])) != None ):
+        elif re.search("tan.*sin.*x.*cos.*x.*",str(function)) != None or (function==sym.diff(self.generated[0]) and re.search("tan.*sin.*x.*cos.*x.*",str(self.generated[0])) != None ):
             return np.arange(-3, 3, 0.1)
 
         # elif re.search("tan.*log.*x.*cos.*exp.*x.*",str(function)) != None or (function==sym.simplify(sym.diff(self.generated[0])) and re.search("tan.*log.*x.*cos.*exp.*x.*",str(self.generated[0])) != None ):
@@ -1216,7 +1211,7 @@ class Ui_MainWindow5(object):
             else:
                 new = cl.Exercises(exercise, solution)
                 feladat = new.getExercise()
-                realsol = sym.simplify(sym.diff(feladat))
+                realsol = sym.diff(feladat)
 
                 if realsol.equals(solution):
                     self.iconlabel.setPixmap(QtGui.QPixmap(":/images/images/greentickmark.png"))
@@ -1263,7 +1258,7 @@ class Ui_MainWindow5(object):
     def default(self):
         self.generated=self.randomDivisionFunction()
         self.textBrowser.setText(str(self.generated[0]))
-        self.solution = sym.simplify(sym.diff(self.generated[0]))
+        self.solution = sym.diff(self.generated[0])
         self.textEdit.clear()
         self.iconlabel.clear()
         self.textEdit.setStyleSheet("")
@@ -1435,7 +1430,7 @@ class Ui_MainWindow6(object):
 
         self.generated = self.randomExercises()
         self.textBrowser.setText(str(self.generated[0]))
-        self.solution = sym.simplify(sym.diff(self.generated[0]))
+        self.solution = sym.diff(self.generated[0])
 
         self.pushButton_2.clicked.connect(self.checking)
         self.pushButton_3.clicked.connect(self.next)
@@ -1509,7 +1504,7 @@ class Ui_MainWindow6(object):
 
                 new = cl.Exercises(exercise, solution)
                 feladat = new.getExercise()
-                realsol = sym.simplify(sym.diff(feladat))
+                realsol = sym.diff(feladat)
 
                 if realsol.equals(solution):
                     self.iconlabel.setPixmap(QtGui.QPixmap(":/images/images/greentickmark.png"))
@@ -1525,6 +1520,7 @@ class Ui_MainWindow6(object):
                         self.rightSolvedExercises.remove(random.choice(self.rightSolvedExercises))
                         self.rightSolvedExercises.remove(random.choice(self.rightSolvedExercises))
                         self.loadPictures()
+                        self.temp=False
                     return False
 
         except cl.MissingAnswer:
@@ -1567,7 +1563,7 @@ class Ui_MainWindow6(object):
     def default(self):
         self.generated=self.randomExercises()
         self.textBrowser.setText(str(self.generated[0]))
-        self.solution = sym.simplify(sym.diff(self.generated[0]))
+        self.solution = sym.diff(self.generated[0])
         self.textEdit.clear()
         self.iconlabel.clear()
         self.textEdit.setStyleSheet("")
@@ -1780,11 +1776,10 @@ class Controller:
         except cl.ClosingConfirmation as cc:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Mentés')
-            #msg.setIconPixmap(QtGui.QPixmap(":/images/images/trophy.png"))
             msg.setText(cc.__str__())
-            closeBtn = msg.addButton('Kilépés', msg.ActionRole)
+            closeBtn = msg.addButton('Nem', msg.ActionRole)
             closeBtn.clicked.connect(self.exitBtnAlapderivaltak)
-            saveBtn = msg.addButton('Mentés', msg.ActionRole)
+            saveBtn = msg.addButton('Igen', msg.ActionRole)
             saveBtn.clicked.connect(self.saveAlapderivaltak)
             msg.exec()
 
@@ -1792,15 +1787,14 @@ class Controller:
         try:
             self.Show_Fooldal()
             raise cl.ClosingConfirmation('összetett függvények')
-
         except cl.ClosingConfirmation as cc:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Mentés')
             #msg.setIconPixmap(QtGui.QPixmap(":/images/images/trophy.png"))
             msg.setText(cc.__str__())
-            closeBtn = msg.addButton('Kilépés', msg.ActionRole)
+            closeBtn = msg.addButton('Nem', msg.ActionRole)
             closeBtn.clicked.connect(self.exitBtnOsszetett)
-            saveBtn = msg.addButton('Mentés', msg.ActionRole)
+            saveBtn = msg.addButton('Igen', msg.ActionRole)
             saveBtn.clicked.connect(self.saveOsszetett)
             msg.exec()
 
@@ -1814,9 +1808,9 @@ class Controller:
             msg.setWindowTitle('Mentés')
             #msg.setIconPixmap(QtGui.QPixmap(":/images/images/trophy.png"))
             msg.setText(cc.__str__())
-            closeBtn = msg.addButton('Kilépés', msg.ActionRole)
+            closeBtn = msg.addButton('Nem', msg.ActionRole)
             closeBtn.clicked.connect(self.exitBtnSzorzas)
-            saveBtn = msg.addButton('Mentés', msg.ActionRole)
+            saveBtn = msg.addButton('Igen', msg.ActionRole)
             saveBtn.clicked.connect(self.saveSzorzas)
             msg.exec()
 
@@ -1830,9 +1824,9 @@ class Controller:
             msg.setWindowTitle('Mentés')
             #msg.setIconPixmap(QtGui.QPixmap(":/images/images/trophy.png"))
             msg.setText(cc.__str__())
-            closeBtn = msg.addButton('Kilépés', msg.ActionRole)
+            closeBtn = msg.addButton('Nem', msg.ActionRole)
             closeBtn.clicked.connect(self.exitBtnOsztas)
-            saveBtn = msg.addButton('Mentés', msg.ActionRole)
+            saveBtn = msg.addButton('Igen', msg.ActionRole)
             saveBtn.clicked.connect(self.saveOsztas)
             msg.exec()
 
@@ -1844,11 +1838,10 @@ class Controller:
         except cl.ClosingConfirmation as cc:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Mentés')
-            #msg.setIconPixmap(QtGui.QPixmap(":/images/images/trophy.png"))
             msg.setText(cc.__str__())
-            closeBtn = msg.addButton('Kilépés', msg.ActionRole)
+            closeBtn = msg.addButton('Nem', msg.ActionRole)
             closeBtn.clicked.connect(self.exitBtnKaland)
-            saveBtn = msg.addButton('Mentés', msg.ActionRole)
+            saveBtn = msg.addButton('Igen', msg.ActionRole)
             saveBtn.clicked.connect(self.saveKaland)
             msg.exec()
 
@@ -1999,9 +1992,9 @@ class Controller:
         except FileNotFoundError:
             pass
 
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     Controller = Controller()
     Controller.Show_Fooldal()
     sys.exit(app.exec_())
-
