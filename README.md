@@ -6,7 +6,8 @@ Használati utasítás:
 -szükséges csomagok: sympy, numpy, pyQt5, random, pyqtgraph
 
 Az edun.py futtatásával indítható el az alkalmazás, vagy a következő linken található fájl letöltésével:
-https://drive.google.com/drive/folders/1dGDpMyQHeYuVbyNLLd_PDRlaVwLCca47?usp=sharing --> EDUN-main/dist/edun.exe futtatása (jelszó: edun2020)
+https://drive.google.com/drive/folders/1dGDpMyQHeYuVbyNLLd_PDRlaVwLCca47?usp=sharing 
+    --> EDUN-main/dist/edun.exe futtatása (jelszó: edun2020)
 
 A főmenüből kiválaszhatjuk, hogy a deriválási szabályok melyikét kívánjuk gyakorolni, illetve találhatunk egy "Kaland" menüt, melyben bonyolultabb feladatokat oldhatunk meg játékosan.
 
