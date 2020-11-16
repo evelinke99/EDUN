@@ -52,6 +52,14 @@ class Ui_MainWindow(object):
         self.pushButton_2.setStyleSheet("background:rgb(143, 224, 166)")
         self.pushButton_2.setObjectName("pushButton_2")
         MainWindow.setCentralWidget(self.centralwidget)
+        self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_7.setGeometry(QtCore.QRect(780, 110, 61, 41))
+        self.pushButton_7.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/images/images/questionmark.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_7.setIcon(icon1)
+        self.pushButton_7.setIconSize(QtCore.QSize(40, 35))
+        self.pushButton_7.setObjectName("pushButton_7")
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 852, 26))
         self.menubar.setObjectName("menubar")
@@ -84,6 +92,29 @@ class Ui_MainWindow(object):
 "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; color:#005500;\">Kellemes és hasznos időtöltést!  </span><img src=\":/images/images/wink.png\" /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; color:#005500;\"><br /></p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow", "Alapderiváltak"))
+
+
+class Ui_Form(object):
+    "Súgó ablak"
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(560, 450)
+        Form.setMaximumSize(QtCore.QSize(560, 450))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/images/images/questionmark.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        Form.setWindowIcon(icon)
+        self.label = QtWidgets.QLabel(Form)
+        self.label.setGeometry(QtCore.QRect(0, 0, 560, 450))
+        self.label.setText("")
+        self.label.setPixmap(QtGui.QPixmap(":/images/images/sugo.PNG"))
+        self.label.setObjectName("label")
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Súgó"))
 
 
 class Ui_MainWindow2(object):
@@ -206,11 +237,13 @@ class Ui_MainWindow2(object):
         self.checkBox.setText(_translate("MainWindow2", "Függvény kirajzolása"))
         self.checkBox_2.setText(_translate("MainWindow2", "Függvény kirajzolása"))
         self.label_3.setText(_translate("MainWindow2", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt;\">Alapderiváltak</span></p></body></html>"))
+        self.label_3.setToolTip(_translate("MainWindow2","<html><head/><body><p><img src=\":/images/images/alapderivalt.png\"/></p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow2", "Ellenőriz"))
         self.pushButton_3.setText(_translate("MainWindow2", "Tovább"))
 
 
     def next(self):
+        "Tovább gomb eseménye"
         try:
             if self.checking() and len(self.rightSolvedExercises)!=self.generated[2]:
                 self.default()
@@ -240,6 +273,7 @@ class Ui_MainWindow2(object):
             msg.exec()
 
     def checking(self):
+        "Megoldások ellenőrzése"
         try:
             exercise = self.textBrowser.toPlainText()
             solution = self.textEdit.toPlainText()
@@ -266,6 +300,7 @@ class Ui_MainWindow2(object):
 
 
     def default(self):
+        "Ablak inicializálása"
         self.generated=self.basicrand()
         self.textBrowser.setText(str(self.generated[0]))
         self.solution = sym.diff(self.generated[0])
@@ -278,6 +313,7 @@ class Ui_MainWindow2(object):
 
 
     def checkBoxChecking(self):
+        "Derivált függvény feltételeit, és a checkbox állását ellenőrző függvény"
         try:
             if self.checkBox_2.checkState() and (self.checking() == False or self.textEdit.toPlainText() == ""):
                 raise cl.MissingAnswer()
@@ -293,15 +329,16 @@ class Ui_MainWindow2(object):
 
 
     def drawFuncBtn(self):
+        "Alapfüggvény görbéjének kirajzolása"
         self.drawFunc(self.getXvalues(self.generated[0]))
 
     def drawDiffFuncBtn(self):
+        "Derivált függvény görbéjének kirajzolása"
         self.drawDiffFunc(self.getXvalues(self.solution))
 
 
     def basicrand(self):
-        "kigenerál egy random függvénytípust -->feladatot (egy futtatáskor csak egyszer)"
-        "visszaadja még a feladattípusát és a típusok db számát is ami később lényeges"
+        "Alapfüggvények kigenerálása"
         try:
             x = sym.symbols('x')
             k = sym.symbols('k', integer=True)
@@ -318,18 +355,19 @@ class Ui_MainWindow2(object):
                     exercise = exerciseType.replace(k, random.randint(1, 10))
                     return exercise, exerciseType,len(types)
                 if str(exerciseType) in self.rightSolvedExercises:
-                     return self.basicrand()
+                    return self.basicrand()
 
         except cl.FinishedChallange as fc:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Siker')
             msg.setIconPixmap(QtGui.QPixmap(":/images/images/trophy.png"))
             msg.setText(fc.__str__())
-            closeBtn=msg.addButton('Kilépés', msg.ActionRole)
+            closeBtn = msg.addButton('Kilépés', msg.ActionRole)
             closeBtn.clicked.connect(Controller.exitBtnAlapderivaltak())
-            againBtn=msg.addButton('Újra',msg.ActionRole)
+            againBtn = msg.addButton('Újra', msg.ActionRole)
             againBtn.clicked.connect(Controller.againButton1)
             msg.exec()
+
 
 
     def getXvalues(self,function):
@@ -354,7 +392,7 @@ class Ui_MainWindow2(object):
 
 
     def drawing(self,exercise,pen,name,xValues):
-        "Függvény x és y tengelyértékeinek tömbbé alakítása és kirajzolása"
+        "A függvények x és y tengelyértékeinek tömbbé alakítása és kirajzolása"
         x=Controller.values(exercise,xValues)[0]
         y=Controller.values(exercise,xValues)[1]
 
@@ -393,6 +431,7 @@ class Ui_MainWindow2(object):
 
 
 class Ui_MainWindow3(object):
+    "Összetett függvények"
     rightSolvedExercises=[]
     def setupUi(self, MainWindow3):
         try:
@@ -514,13 +553,13 @@ class Ui_MainWindow3(object):
         self.checkBox.setText(_translate("MainWindow3", "Függvény kirajzolása"))
         self.checkBox_2.setText(_translate("MainWindow3", "Függvény kirajzolása"))
         self.label_3.setText(_translate("MainWindow3", "<html><head/><body><p align=\"center\">Összetett függvények</p></body></html>"))
+        self.label_3.setToolTip(_translate("MainWindow3","<html><head/><body><p><img src=\":/images/images/osszetett.png\"/></p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow3", "Ellenőriz"))
         self.pushButton_3.setText(_translate("MainWindow3", "Tovább"))
 
 
     def randomComplexFunction(self):
-        "kigenerál egy random függvénytípust -->feladatot (egy futtatáskor csak egyszer)"
-        "visszaadja még a feladattípusát és a típusok db számát is ami később lényeges"
+        "Összetett függvények generálása"
         try:
             x = sym.symbols('x')
             k = sym.symbols('k', integer=True)
@@ -552,6 +591,7 @@ class Ui_MainWindow3(object):
             msg.exec()
 
     def checking(self):
+        "Megoldás ellenőrzése"
         try:
             exercise = self.textBrowser.toPlainText()
             solution = self.textEdit.toPlainText()
@@ -578,6 +618,7 @@ class Ui_MainWindow3(object):
 
 
     def next(self):
+        "Tovább gomb eseménye"
         try:
             if self.checking() and len(self.rightSolvedExercises)!=self.generated[2]:
                 self.default()
@@ -608,6 +649,7 @@ class Ui_MainWindow3(object):
 
 
     def default(self):
+        "Ablak inicializálása"
         self.generated=self.randomComplexFunction()
         self.textBrowser.setText(str(self.generated[0]))
         self.solution = sym.diff(self.generated[0])
@@ -645,6 +687,7 @@ class Ui_MainWindow3(object):
 
 
     def drawing(self,exercise,pen,name,xValues):
+        "Görbék kirajzolása"
         x=Controller.values(exercise,xValues)[0]
         y=Controller.values(exercise,xValues)[1]
 
@@ -683,15 +726,15 @@ class Ui_MainWindow3(object):
 
 
     def drawFuncBtn(self):
+        "Alapfüggvény kirajzolásért felelős gomb eseménye"
         self.drawFunc(self.getXvalues(self.generated[0]))
-        #self.drawFunc(np.arange(-10, 10, 0.1))
 
     def drawDiffFuncBtn(self):
+        "Derivált függvény kirajzolásáért felelős gomb eseménye"
         self.drawDiffFunc(self.getXvalues(self.solution))
-        #self.drawDiffFunc(np.arange(-10, 10, 0.1))
-
 
     def checkBoxChecking(self):
+        "Derivált függvény kirajzolásáért felelős checkbox eseménye"
         try:
             if self.checkBox_2.checkState() and (self.checking() == False or self.textEdit.toPlainText() == ""):
                 raise cl.MissingAnswer()
@@ -707,6 +750,7 @@ class Ui_MainWindow3(object):
 
 
 class Ui_MainWindow4(object):
+    "Szorzás"
     rightSolvedExercises=[]
     def setupUi(self, MainWindow4):
         try:
@@ -829,10 +873,12 @@ class Ui_MainWindow4(object):
         self.checkBox.setText(_translate("MainWindow4", "Függvény kirajzolása"))
         self.checkBox_2.setText(_translate("MainWindow4", "Függvény kirajzolása"))
         self.label_3.setText(_translate("MainWindow4", "<html><head/><body><p align=\"center\">Szorzás</p></body></html>"))
+        self.label_3.setToolTip(_translate("MainWindow4","<html><head/><body><p><img src=\":/images/images/szorzas.png\"/></p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow4", "Ellenőriz"))
         self.pushButton_3.setText(_translate("MainWindow4", "Tovább"))
 
     def randomMultiplicationFunction(self):
+        "Szorzás függvény generálása"
         try:
             x = sym.symbols('x')
             k = sym.symbols('k', integer=True)
@@ -889,6 +935,7 @@ class Ui_MainWindow4(object):
 
 
     def checking(self):
+        "Megoldás ellenőrzése"
         try:
             exercise = self.textBrowser.toPlainText()
             solution = self.textEdit.toPlainText()
@@ -915,6 +962,7 @@ class Ui_MainWindow4(object):
 
 
     def next(self):
+        "Tovább gomb eseménye"
         try:
             if self.checking() and len(self.rightSolvedExercises)!=self.generated[2]:
                 self.default()
@@ -945,6 +993,7 @@ class Ui_MainWindow4(object):
 
 
     def default(self):
+        "Ablak inicializálása"
         self.generated=self.randomMultiplicationFunction()
         self.textBrowser.setText(str(self.generated[0]))
         self.solution = sym.diff(self.generated[0])
@@ -957,6 +1006,7 @@ class Ui_MainWindow4(object):
 
 
     def drawing(self,exercise,pen,name,xValues):
+        "Görbék kirajzolása"
         x=Controller.values(exercise,xValues)[0]
         y=Controller.values(exercise,xValues)[1]
 
@@ -994,16 +1044,19 @@ class Ui_MainWindow4(object):
                 self.graphicsView.clear()
 
 
-    def drawFuncBtn(self):
-        self.drawFunc(self.getXvalues(self.generated[0]))
-        #self.drawFunc(np.arange(-5, 5, 0.1))
-
     def drawDiffFuncBtn(self):
+        "Derivált függvény görbéének kirajzolásáért felelős esemény"
         self.drawDiffFunc(self.getXvalues(self.solution))
         #self.drawDiffFunc(np.arange(-5, 5, 0.1))
 
+    def drawFuncBtn(self):
+        "Alapfüggvény görbéének kirajzolásáért felelős esemény"
+        self.drawFunc(self.getXvalues(self.generated[0]))
+        #self.drawFunc(np.arange(-5, 5, 0.1))
+
 
     def checkBoxChecking(self):
+        "Derivált függvényhez tartozó checkbox eseménye"
         try:
             if self.checkBox_2.checkState() and (self.checking() == False or self.textEdit.toPlainText() == ""):
                 raise cl.MissingAnswer()
@@ -1019,7 +1072,7 @@ class Ui_MainWindow4(object):
 
 
 class Ui_MainWindow5(object):
-
+    "Osztás"
     rightSolvedExercises=[]
     def setupUi(self, MainWindow5):
         try:
@@ -1140,11 +1193,13 @@ class Ui_MainWindow5(object):
         self.checkBox.setText(_translate("MainWindow5", "Függvény kirajzolása"))
         self.checkBox_2.setText(_translate("MainWindow5", "Függvény kirajzolása"))
         self.label_3.setText(_translate("MainWindow5", "<html><head/><body><p align=\"center\">Osztás</p></body></html>"))
+        self.label_3.setToolTip(_translate("MainWindow5","<html><head/><body><p><img src=\":/images/images/osztas.png\"/></p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow5", "Ellenőriz"))
         self.pushButton_3.setText(_translate("MainWindow5", "Tovább"))
 
 
     def randomDivisionFunction(self):
+        "Osztás függvény generálása"
         try:
             x = sym.symbols('x')
             k = sym.symbols('k', integer=True)
@@ -1201,6 +1256,7 @@ class Ui_MainWindow5(object):
 
 
     def checking(self):
+        "Megoldás helyességének ellenőrzése"
         try:
             exercise = self.textBrowser.toPlainText()
             solution = self.textEdit.toPlainText()
@@ -1227,6 +1283,7 @@ class Ui_MainWindow5(object):
 
 
     def next(self):
+        "Tovább gombhoz tartozó esemény"
         try:
             if self.checking() and len(self.rightSolvedExercises)!=self.generated[2]:
                 self.default()
@@ -1256,6 +1313,7 @@ class Ui_MainWindow5(object):
 
 
     def default(self):
+        "Ablak inicializálása"
         self.generated=self.randomDivisionFunction()
         self.textBrowser.setText(str(self.generated[0]))
         self.solution = sym.diff(self.generated[0])
@@ -1268,6 +1326,7 @@ class Ui_MainWindow5(object):
 
 
     def drawing(self,exercise,pen,name,xValues):
+        "Görbék kirajzolása"
         x=Controller.values(exercise,xValues)[0]
         y=Controller.values(exercise,xValues)[1]
 
@@ -1306,15 +1365,18 @@ class Ui_MainWindow5(object):
 
 
     def drawFuncBtn(self):
+        "Alapfüggvény kirajzolásáért felelős gomb eseménye"
         self.drawFunc(self.getXvalues(self.generated[0]))
         #self.drawFunc(np.arange(-5, 5, 0.1))
 
     def drawDiffFuncBtn(self):
+        "Derivált függvény kirajzolásáért felelős gomb eseménye"
         self.drawDiffFunc(self.getXvalues(self.solution))
         #self.drawDiffFunc(np.arange(-5, 5, 0.1))
 
 
     def checkBoxChecking(self):
+        "Derivált függvényhez tartozó checkbox eseménye"
         try:
             if self.checkBox_2.checkState() and (self.checking() == False or self.textEdit.toPlainText() == ""):
                 raise cl.MissingAnswer()
@@ -1330,6 +1392,7 @@ class Ui_MainWindow5(object):
 
 
 class Ui_MainWindow6(object):
+    "Kaland"
     rightSolvedExercises=[]
     bridgeLvl = len(rightSolvedExercises)
     temp=True
@@ -1451,6 +1514,7 @@ class Ui_MainWindow6(object):
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; color:#005500;\">Ám vigyázat rossz válasszal hátráltathatod a mérnököket!</span></p></body></html>"))
 
     def loadPictures(self):
+        "Híd elemeinek betöltése"
         i=self.bridgeLvl
 
         picture=":/images/images/hid"+str(i)+".png"
@@ -1461,6 +1525,7 @@ class Ui_MainWindow6(object):
 
 
     def randomExercises(self):
+        "Feladatok generálása"
         try:
             x = sym.symbols('x')
             k = sym.symbols('k', integer=True)
@@ -1493,6 +1558,7 @@ class Ui_MainWindow6(object):
 
 
     def checking(self):
+        "Megoldás ellenőrzése"
         try:
             exercise = self.textBrowser.toPlainText()
             solution = self.textEdit.toPlainText()
@@ -1528,6 +1594,7 @@ class Ui_MainWindow6(object):
 
 
     def next(self):
+        "Tovább gomb eseménye"
         try:
             if self.checking() and len(self.rightSolvedExercises)!=self.generated[2]:
                 #self.bridgeLvl+=1
@@ -1561,6 +1628,7 @@ class Ui_MainWindow6(object):
 
 
     def default(self):
+        "Ablak inicializálása"
         self.generated=self.randomExercises()
         self.textBrowser.setText(str(self.generated[0]))
         self.solution = sym.diff(self.generated[0])
@@ -1587,6 +1655,7 @@ class Controller:
     openedkaland=True
 
     def Show_Fooldal(self):
+        "Főoldal megjelenítése"
         self.fooldal = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.fooldal)
@@ -1595,6 +1664,7 @@ class Controller:
         self.ui.pushButton_4.clicked.connect(self.Show_Szorzas)
         self.ui.pushButton_5.clicked.connect(self.Show_Osztas)
         self.ui.pushButton_6.clicked.connect(self.Show_Kaland)
+        self.ui.pushButton_7.clicked.connect(self.Show_Sugo)
         self.fooldal.show()
         if self.isalapderivaltak:
             self.alapderivaltak.hide()
@@ -1612,7 +1682,16 @@ class Controller:
             self.kaland.hide()
             self.iskaland=False
 
+    def Show_Sugo(self):
+        "Súgó megjelenítése"
+        self.sugo=QtWidgets.QMainWindow()
+        self.ui=Ui_Form()
+        self.ui.setupUi(self.sugo)
+        self.sugo.show()
+
+
     def Show_Alapderivaltak(self):
+        "Alapderiváltak ablak megjelenítése"
         try:
             if self.openedalapderivaltak==True:
                 self.alapderivaltak = QtWidgets.QMainWindow()
@@ -1639,6 +1718,7 @@ class Controller:
 
 
     def Show_Osszetett(self):
+        "Összetett függvények ablak megjelenítése"
         try:
             if self.openedosszetett==True:
                 self.osszetett = QtWidgets.QMainWindow()
@@ -1664,6 +1744,7 @@ class Controller:
 
 
     def Show_Szorzas(self):
+        "Szorzás ablak megjelenítése"
         try:
             if self.openedszorzas==True:
                 self.szorzas = QtWidgets.QMainWindow()
@@ -1689,6 +1770,7 @@ class Controller:
 
 
     def Show_Osztas(self):
+        "Osztás ablak megjelenítése"
         try:
             if self.openedosztas==True:
                 self.osztas = QtWidgets.QMainWindow()
@@ -1713,6 +1795,7 @@ class Controller:
             msg.exec()
 
     def Show_Kaland(self):
+        "Kaland ablak megjelenítése"
         try:
             if self.openedkaland==True:
                 self.kaland = QtWidgets.QMainWindow()
@@ -1737,6 +1820,7 @@ class Controller:
             msg.exec()
 
     def exitBtnAlapderivaltak(self):
+        "Alapaderiváltak ablakból kilépés gomb eseménye"
         if os.path.exists('database1.txt'):
             os.remove('database1.txt')
         Ui_MainWindow2.rightSolvedExercises=[]
@@ -1744,24 +1828,28 @@ class Controller:
 
 
     def exitBtnOsszetett(self):
+        "Összetett függvények ablakból kilépés gomb eseménye"
         if os.path.exists('database2.txt'):
             os.remove('database2.txt')
         Ui_MainWindow3.rightSolvedExercises=[]
         self.Show_Fooldal()
 
     def exitBtnSzorzas(self):
+        "Szorzás ablakból kilépés gomb eseménye"
         if os.path.exists('database3.txt'):
             os.remove('database3.txt')
         Ui_MainWindow4.rightSolvedExercises=[]
         self.Show_Fooldal()
 
     def exitBtnOsztas(self):
+        "Osztás ablakból kilépés gomb eseménye"
         if os.path.exists('database4.txt'):
             os.remove('database4.txt')
         Ui_MainWindow5.rightSolvedExercises=[]
         self.Show_Fooldal()
 
     def exitBtnKaland(self):
+        "Kaland ablakból kilépés gomb eseménye"
         if os.path.exists('database5.txt'):
             os.remove('database5.txt')
         Ui_MainWindow6.rightSolvedExercises=[]
@@ -1769,6 +1857,7 @@ class Controller:
 
 
     def closeAlapderivaltak(self):
+        "Alapderiváltak ablak bezárása"
         try:
             self.Show_Fooldal()
             raise cl.ClosingConfirmation('alapderiváltak')
@@ -1784,6 +1873,7 @@ class Controller:
             msg.exec()
 
     def closeOsszetett(self):
+        "Összetett függvények ablak bezárása"
         try:
             self.Show_Fooldal()
             raise cl.ClosingConfirmation('összetett függvények')
@@ -1799,6 +1889,7 @@ class Controller:
             msg.exec()
 
     def closeSzorzas(self):
+        "Szorzás ablak bezárása"
         try:
             self.Show_Fooldal()
             raise cl.ClosingConfirmation('szorzás')
@@ -1815,6 +1906,7 @@ class Controller:
             msg.exec()
 
     def closeOsztas(self):
+        "Osztás ablak bezárása"
         try:
             self.Show_Fooldal()
             raise cl.ClosingConfirmation('osztás')
@@ -1831,6 +1923,7 @@ class Controller:
             msg.exec()
 
     def closeKaland(self):
+        "Kaland ablak bezárása"
         try:
             self.Show_Fooldal()
             raise cl.ClosingConfirmation('kaland')
@@ -1846,6 +1939,7 @@ class Controller:
             msg.exec()
 
     def againButton1(self):
+        "Alapderiváltak ablak újratöltése"
         self.openedalapderivaltak = True
         Ui_MainWindow2.rightSolvedExercises=[]
         if os.path.exists('database1.txt'):
@@ -1854,6 +1948,7 @@ class Controller:
 
 
     def againButton2(self):
+        "Összetett függvények ablak újratöltése"
         self.openedosszetett = True
         Ui_MainWindow3.rightSolvedExercises=[]
         if os.path.exists('database2.txt'):
@@ -1862,6 +1957,7 @@ class Controller:
 
 
     def againButton3(self):
+        "Szorzás ablak újratöltése"
         self.openedszorzas = True
         Ui_MainWindow4.rightSolvedExercises=[]
         if os.path.exists('database3.txt'):
@@ -1870,6 +1966,7 @@ class Controller:
 
 
     def againButton4(self):
+        "Osztás ablak újratöltése"
         self.openedosztas = True
         Ui_MainWindow5.rightSolvedExercises=[]
         if os.path.exists('database4.txt'):
@@ -1878,6 +1975,7 @@ class Controller:
 
 
     def againButton5(self):
+        "Kaland ablak újratöltése"
         self.openedkaland = True
         Ui_MainWindow6.rightSolvedExercises=[]
         if os.path.exists('database5.txt'):
@@ -1897,6 +1995,7 @@ class Controller:
         return xt, yt
 
     def saveAlapderivaltak(self):
+        "Alapderiváltak ablak mentése"
         exercises=Ui_MainWindow2.rightSolvedExercises
         db = open("database1.txt", "w")
         for i in exercises:
@@ -1905,6 +2004,7 @@ class Controller:
         db.close()
 
     def loadAlapderivaltak(self):
+        "Alapderiváltak ablak visszatöltése"
         try:
             db = open('database1.txt', 'r')
             for i in db:
@@ -1915,6 +2015,7 @@ class Controller:
             pass
 
     def saveOsszetett(self):
+        "Összetett függvények ablak mentése"
         exercises=Ui_MainWindow3.rightSolvedExercises
         db = open("database2.txt", "w")
         for i in exercises:
@@ -1923,6 +2024,7 @@ class Controller:
         db.close()
 
     def loadOsszetett(self):
+        "Összetett függvények ablak visszatöltése"
         try:
             db = open('database2.txt', 'r')
             for i in db:
@@ -1934,6 +2036,7 @@ class Controller:
             pass
 
     def saveSzorzas(self):
+        "Szorzás ablak mentése"
         exercises=Ui_MainWindow4.rightSolvedExercises
         db = open("database3.txt", "w")
         for i in exercises:
@@ -1942,6 +2045,7 @@ class Controller:
         db.close()
 
     def loadSzorzas(self):
+        "Szorzás ablak visszatöltése"
         try:
             db = open('database3.txt', 'r')
             for i in db:
@@ -1953,6 +2057,7 @@ class Controller:
             pass
 
     def saveOsztas(self):
+        "Osztás ablak mentése"
         exercises=Ui_MainWindow5.rightSolvedExercises
         db = open("database4.txt", "w")
         for i in exercises:
@@ -1961,6 +2066,7 @@ class Controller:
         db.close()
 
     def loadOsztas(self):
+        "Osztás ablak visszatöltése"
         try:
             db = open('database4.txt', 'r')
             for i in db:
@@ -1972,6 +2078,7 @@ class Controller:
             pass
 
     def saveKaland(self):
+        "Kaland ablak mentése"
         exercises=Ui_MainWindow6.rightSolvedExercises
         lvl=Ui_MainWindow6.bridgeLvl
         db = open("database5.txt", "w")
@@ -1981,6 +2088,7 @@ class Controller:
         db.close()
 
     def loadKaland(self):
+        "Kaland ablak visszatöltése"
         try:
             db = open('database5.txt', 'r')
             for i in db:
